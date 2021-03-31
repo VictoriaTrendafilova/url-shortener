@@ -3,12 +3,8 @@ const host = "http://localhost:5000/";
 document.getElementById("create-short-url").addEventListener("click", function () {
     let longUrl = document.getElementById("long-url").value.trim();
     let fetchUrl = host + 'api/create-short-url';
-    if (longUrl.length === 0) {
+    if (!(/^(http:\/{2}|https:\/{2})(\d|\w)+\S*\.\S+$/.test(longUrl))) {
         // no URL passed
-        alert("Please enter URL!");
-        return;
-    } else if (!(longUrl.startsWith("http://") || longUrl.startsWith("https://"))) {
-        //inalid URL passed
         alert("Please enter valid URL!");
         return;
     }
@@ -25,8 +21,8 @@ document.getElementById("create-short-url").addEventListener("click", function (
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                document.getElementById("short-url").innerText = host + data.shortUrl;
-                document.getElementById("short-url").href = host + data.shortUrl;
+                document.getElementById("short-url").innerText = data.shortUrl;
+                document.getElementById("short-url").href = data.shortUrl;
             } else {
                 throw data.message;
             }
